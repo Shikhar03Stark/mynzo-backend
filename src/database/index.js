@@ -8,13 +8,19 @@ export const sequelize = new Sequelize(
     properties.databaseUsername,
     properties.databasePassword, {
         dialect: properties.databaseDialect,
-        port: properties.databasePort
+        port: properties.databasePort,
+        define: {
+            freezeTableName: true,
+            underscored: true,
+        }
     });
 
 export const connectDatabase = async () => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync();
+        await sequelize.sync({
+            alter: true
+        });
         console.log(`Database connected successfully`);
     } catch (error) {
         console.error(`Error connecting to database ${error}`);

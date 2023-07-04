@@ -1,7 +1,9 @@
 import User from "./User.js";
 import ProfilePicture from "./ProfilePicture.js";
 import Address from "./Address.js";
-import GeoLocation from './GeoLocation.js';
+import Country from "./Country.js";
+import State from "./State.js";
+import City from "./City.js";
 
 // Associations
 
@@ -10,29 +12,81 @@ import GeoLocation from './GeoLocation.js';
  */
 User.hasOne(ProfilePicture, {
     foreignKey: `user_id`,
+    constraints: true,
 });
-ProfilePicture.belongsTo(User);
+ProfilePicture.belongsTo(User, {
+    foreignKey: 'user_id',
+    constraints: true,
+});
 
 /**
  * User has an Address. Address exists for a User.
  */
 User.hasOne(Address, {
-    foreignKey: `user_id`
+    foreignKey: `user_id`,
+    constraints: true,
 });
-Address.belongsTo(User);
+Address.belongsTo(User, {
+    foreignKey: 'user_id',
+    constraints: true
+});
+/**
+ * Country has many states
+ */
+Country.hasMany(State, {
+    foreignKey: 'country_id',
+});
+State.belongsTo(Country, {
+    foreignKey: 'country_id',
+});
 
 /**
- * GeoLocation can contain multiple smaller location. Country has many states, states has many cities.
+ * State has many cities
  */
-GeoLocation.hasMany(GeoLocation, {
-    foreignKey: `under_location`,
-    constraints: false,
-})
+State.hasMany(City, {
+    foreignKey: 'state_id',
+});
+City.belongsTo(State, {
+    foreignKey: 'state_id',
+});
+
+/**
+ * Country has multiple Addresses
+ */
+Country.hasMany(Address, {
+    foreignKey: 'country_id',
+});
+Address.belongsTo(Country, {
+    foreignKey: 'country_id',
+});
+
+/**
+ * State has multiple address
+ */
+State.hasMany(Address, {
+    foreignKey: 'state_id',
+});
+Address.belongsTo(State, {
+    foreignKey: 'state_id',
+});
+
+/**
+ * City has multiple address
+ */
+City.hasMany(Address, {
+    foreignKey: 'city_id',
+});
+Address.belongsTo(City, {
+    foreignKey: 'city_id',
+});
+
 
 
 export default {
     User,
     ProfilePicture,
     Address,
-    GeoLocation,
+    Country,
+    State,
+    City,
 }

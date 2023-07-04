@@ -14,8 +14,12 @@ dotenv.config();
 const port = process.env.PORT || 8443;
 
 app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(morgan("combined"));
 app.use(cors());
+app.use(express.static(`public`));
 
 
 app.get('/health/info', (req, res, next) => {
@@ -56,4 +60,5 @@ app.listen(port, () => {
     console.log(`Server running on port ${port} 🚀. *Expose this port if using Docker*`);
 });
 
+//export for testing
 export default app;

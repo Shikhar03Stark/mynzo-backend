@@ -9,7 +9,6 @@ import {
 import {
     issueJwt
 } from '../utils/jwt.js';
-import MediaType from '../models/enums/MediaType.js';
 
 export const generateOTP = async (req, res, next) => {
     try {
@@ -101,13 +100,23 @@ export const verifyOTP = async (req, res, next) => {
     }
 }
 
-export const getUser = async (req, res, next) => {
+export const getUserProtected = async (req, res, next) => {
     try {
-        const userId = req.params.id;
+        const userId = req.user.id;
 
         const user = await models.User.findByPk(userId, {
             include: [{
-                    model: models.Address
+                    model: models.Address,
+                    include: [{
+                            model: models.Country,
+                        },
+                        {
+                            model: models.State,
+                        },
+                        {
+                            model: models.City,
+                        }
+                    ]
                 },
                 {
                     model: models.ProfilePicture,
@@ -126,4 +135,91 @@ export const getUser = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
+
+export const updateUserProtected = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const firstname = req.body.first_name;
+        const lastname = req.body.last_name;
+        const countryId = req.body.country;
+        const stateId = req.body.state;
+        const cityId = req.body.city;
+
+        const {
+            country,
+            state,
+            city
+        } = await checkIfAddressValid(countryId, stateId, cityId);
+
+
+        let address = await models.Address.findOne({
+            where: {
+                user_id: userId,
+            }
+        });
+
+        const user = await models.User.findByPk(userId);
+
+        if (!address) {
+            address = models.Address.build();
+        }
+        address.user_id = user.id;
+        address.country_id = country.id;
+        address.state_id = state.id;
+        address.city_id = city.id;
+        await address.save();
+
+        user.address = address;
+        user.first_name = firstname;
+        user.last_name = lastname;
+
+        await user.save();
+
+        res.sendStatus(200);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+const checkIfAddressValid = async (countryId, stateId, cityId) => {
+    const country = await models.Country.findByPk(countryId);
+    if (!country) {
+        const err = new Error(`No country associated with id ${countryId}`);
+        err.status = 400;
+        throw err;
+    }
+
+    const state = await models.State.findByPk(stateId);
+    if (!state) {
+        const err = new Error(`No state associated with id ${stateId}`);
+        err.status = 400;
+        throw err;
+    }
+
+    if (state.country_id !== country.id) {
+        const err = new Error(`State ${state.value} does not exists within the country ${country.value}`);
+        err.status = 400;
+        throw err;
+    }
+
+    const city = await models.City.findByPk(cityId);
+    if (!city) {
+        const err = new Error(`No city associated with id ${cityId}`);
+        err.status = 400;
+        throw err;
+    }
+
+    if (city.state_id !== state.id) {
+        const err = new Error(`City ${state.value} does not exists within the state ${country.value}`);
+        err.status = 400;
+        throw err;
+    }
+
+    return {
+        country,
+        state,
+        city
+    };
 }

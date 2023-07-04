@@ -19,6 +19,7 @@ export default sequelize.define(`user`, {
     email: {
         type: STRING,
         allowNull: false,
+        unique: true
     },
     first_name: {
         type: STRING,

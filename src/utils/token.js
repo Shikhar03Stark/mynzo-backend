@@ -1,5 +1,5 @@
 export const getRandomToken = () => {
-    return Math.floor(Math.random() * 1000000);
+    return Math.floor(Math.random() * 90000) + 100000;
 }
 
 export const getExpireDateFromNow = () => {

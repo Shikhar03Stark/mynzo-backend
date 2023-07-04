@@ -25,38 +25,35 @@ module.exports = {
 
     const geolocationCountries = countries.data.map(country => Object.assign({}, {
       id: countries.idMapping.get(country.id),
-      value: country.name,
-      geo_location_type: `COUNTRY`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      value: country.name.toUpperCase(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     }));
-    await queryInterface.bulkInsert('geo_locations', geolocationCountries);
+    await queryInterface.bulkInsert('country', geolocationCountries);
 
     const states = await parseStatesAndMappings();
 
     const geolocationStates = states.data.map(state => Object.assign({}, {
       id: states.idMapping.get(state.id),
-      value: state.name,
-      geo_location_type: `STATE`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      under_location: countries.idMapping.get(state.country_id),
+      value: state.name.toUpperCase(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      country_id: countries.idMapping.get(state.country_id),
     }));
 
-    await queryInterface.bulkInsert('geo_locations', geolocationStates);
+    await queryInterface.bulkInsert('state', geolocationStates);
 
     const cities = await parseCitiesAndMappings();
 
     const geolocationCities = cities.data.map(city => Object.assign({}, {
       id: cities.idMapping.get(city.id),
-      value: city.name,
-      geo_location_type: `CITY`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      under_location: states.idMapping.get(city.state_id),
+      value: city.name.toUpperCase(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      state_id: states.idMapping.get(city.state_id),
     }));
 
-    await queryInterface.bulkInsert('geo_locations', geolocationCities);
+    await queryInterface.bulkInsert('city', geolocationCities);
   },
 
   async down(queryInterface, Sequelize) {
@@ -67,7 +64,10 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete('geo_locations', null, {});
+    await queryInterface.bulkDelete('countries', null, {});
+    await queryInterface.bulkDelete('states', null, {});
+    await queryInterface.bulkDelete('cities', null, {});
+
   }
 };
 

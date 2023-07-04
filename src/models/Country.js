@@ -7,12 +7,14 @@ import {
     sequelize
 } from "../database/index.js";
 
-export default sequelize.define('address', {
+export default sequelize.define('country', {
     id: {
         type: UUID,
         defaultValue: UUIDV4,
         primaryKey: true,
-    }
-}, {
-    timestamps: true
+    },
+    value: {
+        type: STRING,
+        allowNull: false,
+    },
 });

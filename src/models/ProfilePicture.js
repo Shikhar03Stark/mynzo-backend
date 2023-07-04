@@ -7,7 +7,7 @@ import {
     UUID,
     UUIDV4
 } from "sequelize";
-import MediaType from "./enums/MediaType.js";
+import StorageType from "./enums/StorageType.js";
 
 export default sequelize.define('profile_picture', {
     id: {
@@ -27,9 +27,9 @@ export default sequelize.define('profile_picture', {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    media_type: {
-        type: STRING,
-        defaultValue: MediaType.profilePicture,
+    storage: {
+        type: DataTypes.STRING,
+        defaultValue: StorageType.local,
         allowNull: false,
     }
 }, {
