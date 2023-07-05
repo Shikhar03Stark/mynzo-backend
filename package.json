@@ -7,7 +7,7 @@
     "db:create": "npx sequelize-cli db:create",
     "init": "node src/main.js",
     "start": "cross-env NODE_ENV=production npm run db:create && cross-env NODE_ENV=production npm run migrate:all && cross-env NODE_ENV=production npm run seed:all && cross-env NODE_ENV=production npm run init",
-    "dev": "npx nodemon src/main.js",
+    "dev": "npm run db:create && npm run migrate:all && npm run seed:all && npx nodemon src/main.js",
     "seed:all": "npx sequelize-cli db:seed:all",
     "migrate:all": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migration:undo:all",
