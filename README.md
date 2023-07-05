@@ -13,7 +13,7 @@
  - Install node^16 and npm
  - Install docker on you host machine (to run database instance)
  - Create a MySQL container using docker `docker run -d -p 3306:3306 --name mynzo_carbon_mysql -e MYSQL_ROOT_PASSWORD=mypassword mysql`
- - Clone the repo to your local `git clone <git-url>
+ - Clone the repo to your local `git clone <git-url>`
  - SET the environment variables appropriately in `.env` file
  - Run `npm i`
  - Run `npm run dev`
