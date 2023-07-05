@@ -1,28 +1,31 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import properties from './properties.js';
+
 export default {
     'development': {
-        'username': 'postgres',
+        'username': 'root',
         'password': 'harshit',
         'database': 'mynzo_dev',
-        'dialect': 'postgres',
+        'dialect': 'mysql',
         'seederStorage': 'sequelize',
         'seederStorageTableName': 'sequelize_data',
     },
     'test': {
-        'username': 'postgres',
+        'username': 'root',
         'password': 'harshit',
         'database': 'mynzo_test',
-        'dialect': 'postgres',
+        'dialect': 'mysql',
         'seederStorage': 'sequelize',
         'seederStorageTableName': 'sequelize_data',
     },
     'production': {
-        'username': process.env.DATABASE_USERNAME,
-        'password': process.env.DATABASE_PASSWORD,
-        'database': process.env.DATABASE_NAME,
-        'dialect': 'postgres',
+        'host': properties.databaseHost,
+        'username': properties.databaseUsername,
+        'password': properties.databasePassword,
+        'database': properties.databaseName,
+        'dialect': properties.databaseDialect,
         'seederStorage': 'sequelize',
         'seederStorageTableName': 'sequelize_data',
     },

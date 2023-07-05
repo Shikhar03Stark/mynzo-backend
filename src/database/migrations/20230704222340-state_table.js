@@ -27,7 +27,7 @@ module.exports = {
         allowNull: false,
       },
       country_id: {
-        type: STRING,
+        type: UUID,
         allowNull: true,
       },
       created_at: {

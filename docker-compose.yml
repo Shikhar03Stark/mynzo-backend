@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mynzo_db:
+    container_name: mynnzo_database
+    image: mysql
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=harshit$$password
+      - MYSQL_DATABASE=mynzo
+    ports:
+      - $DATABASE_PORT:$DATABASE_PORT
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    container_name: mynzo_application
+    depends_on:
+      - mynzo_db
+    build: .
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_HOST=mynzo_db
+      - DATABASE_PASSWORD=harshit$$password
+    ports:
+      - $PORT:$PORT
+
+volumes:
+  db:
+
+

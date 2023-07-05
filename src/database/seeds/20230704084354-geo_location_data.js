@@ -26,8 +26,8 @@ module.exports = {
     const geolocationCountries = countries.data.map(country => Object.assign({}, {
       id: countries.idMapping.get(country.id),
       value: country.name.toUpperCase(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: new Date(),
+      updated_at: new Date(),
     }));
     await queryInterface.bulkInsert('country', geolocationCountries);
 
@@ -36,8 +36,8 @@ module.exports = {
     const geolocationStates = states.data.map(state => Object.assign({}, {
       id: states.idMapping.get(state.id),
       value: state.name.toUpperCase(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: new Date(),
+      updated_at: new Date(),
       country_id: countries.idMapping.get(state.country_id),
     }));
 
@@ -48,8 +48,8 @@ module.exports = {
     const geolocationCities = cities.data.map(city => Object.assign({}, {
       id: cities.idMapping.get(city.id),
       value: city.name.toUpperCase(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: new Date(),
+      updated_at: new Date(),
       state_id: states.idMapping.get(city.state_id),
     }));
 

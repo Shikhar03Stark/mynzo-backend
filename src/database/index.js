@@ -7,6 +7,7 @@ export const sequelize = new Sequelize(
     properties.databaseName,
     properties.databaseUsername,
     properties.databasePassword, {
+        host: properties.databaseHost,
         dialect: properties.databaseDialect,
         port: properties.databasePort,
         define: {
@@ -23,6 +24,7 @@ export const connectDatabase = async () => {
         });
         console.log(`Database connected successfully`);
     } catch (error) {
-        console.error(`Error connecting to database ${error}`);
+        console.error(`Error connecting to database\n${error}`);
+        process.exit(1);
     }
 }
